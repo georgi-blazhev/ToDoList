@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ToDoList": {
+      "commandName": "Project",
+      "commandLineArgs": "user"
+    }
+  }
+}
