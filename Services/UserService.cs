@@ -9,14 +9,14 @@ using ToDoList.Exceptions;
 
 namespace ToDoList.Services
 {
-    class UserServices
+    public class UserService
     {
         private const string StoreFileName = "Users.json";
         private readonly FileDatabase<User> _storage;
 
         private readonly List<User> _applicationUsers = new List<User>();
 
-        public UserServices()
+        public UserService()
         {
             _storage = new FileDatabase<User>();
             List<User> usersFromFile = _storage.Read<List<User>>(StoreFileName);
@@ -35,7 +35,6 @@ namespace ToDoList.Services
             if (CurrentUser.UserRole == Role.RegularUser)
             {
                 throw new Exceptions.UnauthorizedAccessException($"Restricted access for {Role.RegularUser}");
-
             }
             foreach (var user  in _applicationUsers)
             {
@@ -92,6 +91,7 @@ namespace ToDoList.Services
                 if (user.Id == UserId && CurrentUser.Id != UserId)
                 {
                     _applicationUsers.Remove(user);
+                    SaveToFile();
                 }
             }
             throw new NonExistentUserException($"User with Id: {UserId} not found");

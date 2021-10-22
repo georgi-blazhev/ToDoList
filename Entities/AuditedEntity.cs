@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace ToDoList.Entities
 {
-    class AuditedEntity
+    public abstract class AuditedEntity : Entity
     {
+        public DateTime LastChange { get; set; }
+        public int LastChangeByUserId { get; set; }
     }
 }

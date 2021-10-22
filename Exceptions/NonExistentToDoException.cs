@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace ToDoList.Exceptions
 {
-    class NonExistentListException
+    class NonExistentToDoException : Exception
     {
+        public NonExistentToDoException(string message) : base (message)
+        {
+
+        }
     }
 }

@@ -9,6 +9,7 @@
     "CreatedAt": "2021-10-21T15:50:52.410668+03:00",
     "CreatorId": 1,
     "LastChange": "2021-10-21T15:50:52.410668+03:00",
-    "LastChangeByUserId": 1
+    "LastChangeByUserId": 1,
+    "SharedToDos": []
   }
 ]

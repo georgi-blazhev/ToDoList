@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace ToDoList.Entities
 {
-    class ToDoList
+    public class ToDo : AuditedEntity
     {
+        public string Title { get; set; }
+        public int CreatorId { get; set; }
+        
     }
 }

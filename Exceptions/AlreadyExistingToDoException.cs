@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace ToDoList.Exceptions
 {
-    class AlreadyExistingListException
+    public class AlreadyExistingToDoException : Exception
     {
+        public AlreadyExistingToDoException(string message) : base (message)
+        {
+
+        }
     }
 }
