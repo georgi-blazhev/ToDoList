@@ -81,7 +81,7 @@ namespace ToDoList.Services
             throw new NonExistentToDoException("This task doesn't exist!");
         }
 
-        public void EditTask(int id, string title, string description, bool isComplete)
+        public void EditTask(int id, string title, string description)
         {
             if (userService.CurrentUser == null)
             {
@@ -100,7 +100,7 @@ namespace ToDoList.Services
                 {
                     task.Title = title;
                     task.Description = description;
-                    task.IsComplete = isComplete;
+                    task.IsComplete = false;
                     task.LastChange = DateTime.Now;
                     task.LastChangeByUserId = userService.CurrentUser.Id;
                     SaveToFile();
@@ -121,7 +121,50 @@ namespace ToDoList.Services
             throw new Exceptions.UnauthorizedAccessException("User not creator or doesn't have the ToDo shared!");
         }
 
+        public List<Entities.Task> GetTasks()
+        {
+            List<Entities.Task> allCreatedAndSharedTasks = new List<Entities.Task>(); 
 
+            foreach (var task in tasks)
+            {
+                User current = userService.CurrentUser;
+                ToDo toDo = toDoService.GetTodo(task.ToDoId);
+                if (CheckIfCreatedByOrAssigned(current, toDo, task))
+                {
+                    allCreatedAndSharedTasks.Add(task);
+                }
+            }
+            return allCreatedAndSharedTasks;
+        }
+
+        public bool CheckIfCreatedByOrAssigned(User current, ToDo toDo, Entities.Task task)
+        {
+            return ((current.Id == toDo.CreatorId) || toDo.AssignedTasks.Contains(task.Id));
+        }
+
+        private Entities.Task GetTask(int id)
+        {
+            foreach (var task in tasks)
+            {
+                if (task.Id == id)
+                {
+                    return task;
+                }
+            }
+            //TODO: TODO Exception for tasks
+            throw new NonExistentToDoException("Task doesn't exist!");
+        }
+
+        public void CompleteTask(int id)
+        {
+            User current = userService.CurrentUser;
+            Entities.Task task = GetTask(id);
+            ToDo toDo = toDoService.GetTodo(task.ToDoId);
+            if (CheckIfCreatedByOrAssigned(current, toDo, task))
+            {
+                task.IsComplete = !task.IsComplete;
+            }
+        }
 
         private void SaveToFile()
         {
