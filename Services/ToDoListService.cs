@@ -39,7 +39,7 @@ namespace ToDoList.Services
                 throw new Exceptions.UnauthorizedAccessException("Cannot create a list without logging in!");
             }
 
-            ToDo list = new ToDo() {
+            ToDo toDo = new ToDo() {
                 Id = toDos.Count + 1,
                 Title = title, 
                 CreatorId = userService.CurrentUser.Id, 
@@ -48,7 +48,7 @@ namespace ToDoList.Services
                 LastChangeByUserId = 
                 userService.CurrentUser.Id
            };
-            toDos.Add(list);
+            toDos.Add(toDo);
             SaveToFile();
         }
 
@@ -143,21 +143,17 @@ namespace ToDoList.Services
             }
             throw new NonExistentToDoException($"ToDo with {title} doesn't exist");
         }
-
         
-            
         private void SaveToFile()
         {
             _storage.Write(StoreFileName, toDos);
         }
-
 
         public List<ToDo> GetAll()
         {
             List<ToDo> allAndSharedToDos = new List<ToDo>();
 
             User current = userService.CurrentUser;
-
 
             if (current.UserRole == Role.Admin)
             {
