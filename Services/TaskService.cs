@@ -110,6 +110,18 @@ namespace ToDoList.Services
             throw new NonExistentToDoException("This task doesn't exist!");
         }
 
+        public void AssignTask(int userId, int toDoId, int taskId)
+        {
+            ToDo toDo = toDoService.GetTodo(toDoId);
+            User user = userService.ReadSingleUser(userId);
+            if (toDo.CreatorId == userId || user.SharedToDos.Contains(toDoId))
+            {
+                toDo.AssignedTasks.Add(taskId);
+            }
+            throw new Exceptions.UnauthorizedAccessException("User not creator or doesn't have the ToDo shared!");
+        }
+
+
 
         private void SaveToFile()
         {

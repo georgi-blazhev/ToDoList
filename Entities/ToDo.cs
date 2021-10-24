@@ -10,6 +10,7 @@ namespace ToDoList.Entities
     {
         public string Title { get; set; }
         public int CreatorId { get; set; }
+        public List<int> AssignedTasks { get; set; }
         
     }
 }
