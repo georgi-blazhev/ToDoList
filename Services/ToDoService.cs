@@ -10,14 +10,14 @@ using ToDoList.Services;
 
 namespace ToDoList.Services
 {
-    public class ToDoListService
+    public class ToDoService
     {
         private const string StoreFileName = "ToDos.json";
         private readonly FileDatabase<ToDo> _storage;
         private readonly UserService userService;
         private readonly List<ToDo> toDos;
 
-        public ToDoListService()
+        public ToDoService()
         {
             _storage = new FileDatabase<ToDo>();
 
