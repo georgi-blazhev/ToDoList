@@ -28,7 +28,7 @@ namespace ToDoList.Services
                 toDos = new List<ToDo>();
             }
 
-            userService = new UserService();
+            userService = UserService.GetInstance();
         }
 
         public void CreateToDo(string title)
@@ -54,6 +54,9 @@ namespace ToDoList.Services
 
         public void DeleteToDo(int id)
         {
+
+            List<User> allUsers = userService.ReadUsers();
+
             if (userService.CurrentUser == null)
             {
                 //TODO: Exception for unauthenticated
@@ -65,6 +68,13 @@ namespace ToDoList.Services
                 if (list.Id == id)
                 {
                     toDos.Remove(list);
+                    foreach (var user in allUsers)
+                    {
+                        if (user.SharedToDos.Contains(id))
+                        {
+                            user.SharedToDos.Remove(id);
+                        }
+                    }
                     SaveToFile();
                 }
             }
@@ -109,11 +119,59 @@ namespace ToDoList.Services
             }
             throw new NonExistentUserException($"User with Id:{Id} not found!");
         }
+
+        public ToDo GetTodo(int id)
+        {
+            foreach (var toDo in toDos)
+            {
+                if (toDo.Id == id)
+                {
+                    return toDo;
+                }
+            }
+            throw new NonExistentToDoException($"ToDo with {id} doesn't exist");
+        }
+
+        public ToDo GetTodo(string title)
+        {
+            foreach (var toDo in toDos)
+            {
+                if (toDo.Title == title)
+                {
+                    return toDo;
+                }
+            }
+            throw new NonExistentToDoException($"ToDo with {title} doesn't exist");
+        }
+
+        
             
         private void SaveToFile()
         {
             _storage.Write(StoreFileName, toDos);
         }
 
+
+        public List<ToDo> GetAll()
+        {
+            List<ToDo> allAndSharedToDos = new List<ToDo>();
+
+            User current = userService.CurrentUser;
+
+
+            if (current.UserRole == Role.Admin)
+            {
+                return toDos;
+            }
+
+            foreach (var toDo in toDos)
+            {
+                if (current.Id == toDo.CreatorId || current.SharedToDos.Contains(toDo.Id))
+                {
+                    allAndSharedToDos.Add(toDo);
+                }
+            }
+            return allAndSharedToDos;
+        }
     }
 }

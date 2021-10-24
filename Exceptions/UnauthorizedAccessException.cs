@@ -8,7 +8,6 @@ namespace ToDoList.Exceptions
 {
     class UnauthorizedAccessException : Exception
     {
-
         public UnauthorizedAccessException(string message) : base(message)
         {
         }

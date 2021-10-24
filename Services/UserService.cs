@@ -11,12 +11,14 @@ namespace ToDoList.Services
 {
     public class UserService
     {
+        private static readonly UserService _userService = new UserService();
+
         private const string StoreFileName = "Users.json";
         private readonly FileDatabase<User> _storage;
 
         private readonly List<User> _applicationUsers = new List<User>();
 
-        public UserService()
+        private UserService()
         {
             _storage = new FileDatabase<User>();
             List<User> usersFromFile = _storage.Read<List<User>>(StoreFileName);
@@ -146,6 +148,11 @@ namespace ToDoList.Services
         public void LogOut()
         {
             CurrentUser = null;
+        }
+
+        public static UserService GetInstance()
+        {
+            return _userService;
         }
     }
 }

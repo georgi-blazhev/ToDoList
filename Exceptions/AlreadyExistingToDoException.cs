@@ -10,7 +10,6 @@ namespace ToDoList.Exceptions
     {
         public AlreadyExistingToDoException(string message) : base (message)
         {
-
         }
     }
 }
